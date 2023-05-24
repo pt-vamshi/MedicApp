@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "524929055322",
+    "project_id": "medicapp-97e4f",
+    "storage_bucket": "medicapp-97e4f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524929055322:android:7e6d9a5ce7e0ec4736b663",
+        "android_client_info": {
+          "package_name": "com.medicapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "524929055322-g16pklu1qe0kd93tlpel70n7sgrrk7mo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.medicapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "524929055322-nk46jjsfndba8o65ipq0b4eeq24o1cd6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9FqX1BlL3YTtlHE9qXzkrZofI3xyFgSU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "524929055322-nk46jjsfndba8o65ipq0b4eeq24o1cd6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
