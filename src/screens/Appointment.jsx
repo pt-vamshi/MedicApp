@@ -62,21 +62,21 @@ const Appointment = ({route, navigation}, props) => {
       </View>
       <View style={{flexDirection: 'row'}}>
         <View style={styles.doctor_record}>
-          <Text>Patients</Text>
-          <Text>2.3k</Text>
+          <Text style={{color:'black'}}>Patients</Text>
+          <Text style={{color:'black'}}>2.3k</Text>
         </View>
         <View style={styles.doctor_record}>
-          <Text>Experience</Text>
-          <Text>{route.params.Experience} Years</Text>
+          <Text style={{color:'black'}}>Experience</Text>
+          <Text style={{color:'black'}}>{route.params.Experience} Years</Text>
         </View>
         <View style={styles.doctor_record}>
-          <Text>Reviews</Text>
-          <Text>4.00k</Text>
+          <Text style={{color:'black'}}>Reviews</Text>
+          <Text style={{color:'black'}}>4.00k</Text>
         </View>
       </View>
       <View style={styles.doctor_biography}>
-        <Text style={{fontSize:18,fontWeight:'bold'}}>Biography</Text>
-        <Text style={{fontSize:15,fontWeight:'500',marginTop:10}}>
+        <Text style={{fontSize:18,fontWeight:'bold',color:'black'}}>Biography</Text>
+        <Text style={{fontSize:15,fontWeight:'500',marginTop:10,color:'black'}}>
            {route.params.Name} is a highly accomplished and compassionate medical
           professional specializing in {route.params.Speciality}. With extensive
           experience and a patient-centered approach, {route.params.Name} is

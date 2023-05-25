@@ -1,6 +1,5 @@
 // import { createStackNavigator } from '@react-navigation/native-stack';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import InitialScreen from '../screens/InitialScreen';
 import HomeScreen from '../screens/HomeScreen';
 import Appointment from '../screens/Appointment';
 import AppointmentForm from '../screens/AppointmentForm';
@@ -19,12 +18,6 @@ const  HomeStack= ()=> {
         <Stack.Screen name="Appointment" component={Appointment} 
         options={{
           title: 'Appointment',
-          headerTitleAlign: 'center',
-        }}
-/>
-<Stack.Screen name="InitialScreen" component={InitialScreen} 
-        options={{
-          title: 'InitialScreen',
           headerTitleAlign: 'center',
         }}
 />

@@ -19,10 +19,18 @@ const SignIn = ({navigation}) => {
     const[email,setEmail]=useState("")
     const[password,setPassword]=useState("")
     const { login } = useContext(AuthContext);
+
+    const doLogin=()=>{
+      if(email!='' && password!=""){
+        login(email, password).then((data)=>{
+        })
+      }else{
+          Alert.alert("Please fill required fields")
+      }
+    }
   return (
     <ScrollView style={{backgroundColor:'#fff'}}>
     <View
-    // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     style={styles.container}>
       {/* WelcomeIcon */}
       <View style={styles.header}>
@@ -50,21 +58,7 @@ const SignIn = ({navigation}) => {
       </View>
       {/* form */}
       <View style={styles.form}>
-
-        {/* <Text style={styles.text_header}>FullName</Text>
-        <TextInput
-          placeholder="Enter Your FullName"
-          placeholderTextColor="#666666"
-          style={[
-            styles.textInput,
-            {
-              color: 'black',
-            },
-          ]}
-          autoCapitalize="none"
-          //   onChangeText={val => handleValidUser(val)}
-        /> */}
-        <Text style={styles.text_header}>Email</Text>
+        <Text style={styles.text_header}>Email*</Text>
         <TextInput
           placeholder="Enter Your Email"
           placeholderTextColor="#666666"
@@ -77,7 +71,7 @@ const SignIn = ({navigation}) => {
           autoCapitalize="none"
           onChangeText={val => setEmail(val)}
         />
-        <Text style={styles.text_header}>Password</Text>
+        <Text style={styles.text_header}>Password*</Text>
         <TextInput
           placeholder="Enter Your Password"
           placeholderTextColor="#666666"
@@ -94,8 +88,8 @@ const SignIn = ({navigation}) => {
       {/* button  */}
       <TouchableOpacity
             style={styles.appButtonContainer}
-            // onPress={() => doLogin()}
-            onPress={() => login(email, password)}
+            onPress={() => doLogin()}
+            // onPress={() => login(email, password)}
             >
             <Text
               style={styles.appButtonText}
@@ -109,12 +103,12 @@ const SignIn = ({navigation}) => {
 <View style={{flexDirection: 'row', alignItems: 'center',marginTop:10}}>
   <View style={{flex: 1, height: 1, marginLeft:20,backgroundColor: 'black'}} />
   <View>
-    <Text style={{width: 50, textAlign: 'center'}}>Or</Text>
+    <Text style={{width: 50, textAlign: 'center',color:'black'}}>Or</Text>
   </View>
   <View style={{flex: 1, height: 1,  marginRight:20,backgroundColor: 'black'}} />
 </View>
       
-      <Text style={{fontSize:18}}>Don't have an account? 
+      <Text style={{fontSize:18,color:'black'}}>Don't have an account? 
       <Text
          onPress={() => navigation.navigate('SignUp')}
               style={styles.linkButtonText}
@@ -157,6 +151,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 10,
     fontWeight: 'bold',
+    color:'black'
   },
   textInput: {
     marginTop: 12,

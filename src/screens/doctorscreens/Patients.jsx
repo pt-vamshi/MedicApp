@@ -70,7 +70,6 @@ import {
           Alert.alert(err);
         }
       };
-      console.log(patientdata,"pp")
     const renderData = Item => {
       return (
         <Pressable style={styles.card_container} 
@@ -113,8 +112,8 @@ import {
                     alignItems: 'center',
                     margin: 5,
                   }}>
-                  <Text>Appoinment Date</Text>
-                  <Text>{Item?.item?.datetime}</Text>
+                  <Text style={{color: 'black'}}>Appoinment Date</Text>
+                  <Text style={{color: 'black'}}>{Item?.item?.datetime}</Text>
                 </View>
                 <View
                   style={{
@@ -122,8 +121,8 @@ import {
                     alignItems: 'center',
                     margin: 5,
                   }}>
-                  <Text>Status</Text>
-                  <Text>{Item?.item?.appointmentstatus ? 'Approved' :'Pending'}</Text>
+                  <Text style={{color: 'black'}}>Status</Text>
+                  <Text style={{color: 'black'}}>{Item?.item?.appointmentstatus ? 'Approved' :'Pending'}</Text>
                 </View>
               </View>
             </View>
@@ -185,6 +184,7 @@ import {
       flexDirection: 'row',
       justifyContent: 'center',
       alignContent: 'center',
+      
     },
     doctor_details_Image: {
       flex: 0.4,
@@ -197,6 +197,7 @@ import {
       justifyContent: 'center',
       alignItems: 'center',
       alignContent: 'center',
+      color: 'black',
       // backgroundColor:'red'
     },
     doctor_name: {

@@ -36,7 +36,7 @@ const RadioButton = ({ options, selectedOption, onSelect }) => {
                 />
               )}
             </View>
-            <Text style={{ marginLeft:5 }}>{option}</Text>
+            <Text style={{ marginLeft:5 ,color:'black'}}>{option}</Text>
           </TouchableOpacity>
         ))}
       </View>

@@ -21,21 +21,18 @@ const SignUp = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  // const createUser = () => {
-  //     try {
-  //       auth().createUserWithEmailAndPassword(email, password);
-  //     } catch (error) {
-  //       alert(error);
-  //     }
-  //   };
-
+  const doRegister=()=>{
+    if(fullname!="" && email!='' && password!=""){
+      register(email, password)
+    }else{
+        Alert.alert("Please fill required fields")
+    }
+  }
   return (
     <ScrollView style={{backgroundColor: '#fff'}}>
       {isloading ? <ActivityIndicator size={'large'} color={'blue'} style={{marginTop: 300}}/>: 
       <View
-        // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}>
-        {/* WelcomeIcon */}
         <View style={styles.header}>
           <Image
             source={require('../assets/images/docicon.jpg')}
@@ -61,7 +58,7 @@ const SignUp = ({navigation}) => {
         </View>
         {/* form */}
         <View style={styles.form}>
-          <Text style={styles.text_header}>FullName</Text>
+          <Text style={styles.text_header}>FullName *</Text>
           <TextInput
             placeholder="Enter Your FullName"
             placeholderTextColor="#666666"
@@ -74,7 +71,7 @@ const SignUp = ({navigation}) => {
             autoCapitalize="none"
             onChangeText={val => setFullName(val)}
           />
-          <Text style={styles.text_header}>Email</Text>
+          <Text style={styles.text_header}>Email *</Text>
           <TextInput
             placeholder="Enter Your Email"
             placeholderTextColor="#666666"
@@ -87,7 +84,7 @@ const SignUp = ({navigation}) => {
             autoCapitalize="none"
             onChangeText={val => setEmail(val)}
           />
-          <Text style={styles.text_header}>Password</Text>
+          <Text style={styles.text_header}>Password *</Text>
           <TextInput
             placeholder="Enter Your Password"
             placeholderTextColor="#666666"
@@ -104,7 +101,7 @@ const SignUp = ({navigation}) => {
         {/* button  */}
         <TouchableOpacity
           style={styles.appButtonContainer}
-          onPress={() => register(email, password)}>
+          onPress={() => doRegister()}>
           <Text
             style={styles.appButtonText}
             secureTextEntry={true}
@@ -125,7 +122,7 @@ const SignUp = ({navigation}) => {
             }}
           />
           <View>
-            <Text style={{width: 50, textAlign: 'center'}}>Or</Text>
+            <Text style={{width: 50, textAlign: 'center',color: 'black'}}>Or</Text>
           </View>
           <View
             style={{
@@ -137,7 +134,7 @@ const SignUp = ({navigation}) => {
           />
         </View>
 
-        <Text style={{fontSize: 18}}>
+        <Text style={{fontSize: 18,color: 'black'}}>
           Already have an account?{' '}
           <Text
             onPress={() => navigation.navigate('SignIn')}
@@ -181,6 +178,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 10,
     fontWeight: 'bold',
+    color: 'black',
   },
   textInput: {
     marginTop: 12,

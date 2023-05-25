@@ -396,6 +396,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginTop: 10,
     fontWeight: 'bold',
+    color: 'black',
   },
   textInput: {
     marginTop: 12,

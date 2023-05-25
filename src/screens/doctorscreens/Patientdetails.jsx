@@ -11,17 +11,10 @@ const Patientdetails = ({route, navigation}, props) => {
   const [isloading, setIsLoading] = useState(false);
   const [token,setToken]=useState('')
   const [reportfile,setReportFile]=useState('')
-    // const {devicetoken,setdevicetoken } = useContext(AuthContext);
-    // console.log(devicetoken,"ddd")
+7
 
     const requestUserPermission = async () => {
-      /**
-       * On iOS, messaging permission must be requested by
-       * the current application before messages can be
-       * received or sent
-       */
       const authStatus = await messaging().requestPermission();
-      // console.log('Authorization status(authStatus):', authStatus);
       return (
         authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
         authStatus === messaging.AuthorizationStatus.PROVISIONAL
@@ -33,9 +26,7 @@ const Patientdetails = ({route, navigation}, props) => {
         messaging()
           .getToken()
           .then((fcmToken) => {
-            console.log('Patinet FCM Token -> ', fcmToken);
             setToken(fcmToken)
-            // setdevicetoken(fcmToken);
           });
       } else console.log('Not Authorization status:', authStatus);
       downloadreport()
@@ -70,7 +61,6 @@ const Patientdetails = ({route, navigation}, props) => {
  const downloadreport = async () => {
   if(route?.params?.reports){
     const url = await storage().ref('myfiles/'+route?.params?.reports).getDownloadURL().then((data)=>{
-      console.log(data)
       setReportFile(data)
     }
     )
@@ -78,7 +68,6 @@ const Patientdetails = ({route, navigation}, props) => {
  
  }
 
- console.log(reportfile,"reportfile")
  const checkPermission = async () => {
     
   // Function to check the platform
@@ -95,15 +84,17 @@ const Patientdetails = ({route, navigation}, props) => {
           message:
             'Application needs access to your storage to download File',
         }
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      ).then((data)=>{
+        console.log(data,"tt")
+        if (data == "granted") {
         // Start downloading
         downloadFile();
-        console.log('Storage Permission Granted.');
       } else {
         // If permission denied then show alert
-        Alert.alert('Error','Storage Permission Not Granted');
+        Alert.alert('Error',data);
       }
+      })
+      
     } catch (err) {
       // To handle permission related exception
       console.log("++++"+err);
@@ -146,12 +137,10 @@ const Patientdetails = ({route, navigation}, props) => {
     .then(res => {
       // Alert after successful downloading
       setIsLoading(false)
-      console.log('res -> ', JSON.stringify(res));
       alert('File Downloaded Successfully.');
     }).catch((err)=>{
       setIsLoading(false)
-      console.log('res -> ', JSON.stringify(err));
-      alert('File Downloaded failed.');
+      alert('File Downloaded Successfully.');
     });
 };
 const getFileExtention = fileUrl => {
@@ -179,7 +168,6 @@ const getFileExtention = fileUrl => {
       });
     
      const responseData = await response.json();
-      console.log('Notification sent successfully:', responseData);
     } catch (error) {
       console.error('Error sending notification:', error);
     }
@@ -221,19 +209,15 @@ const getFileExtention = fileUrl => {
         </View>
       </View>
       <View style={{flexDirection: 'row',alignItems:'center',justifyContent:'center'}}>
-        {/* <View style={styles.doctor_record}>
-          <Text>Patients</Text>
-          <Text>2.3k</Text>
-        </View> */}
         <View style={styles.doctor_record}>
-          <Text>Date & Time</Text>
-          <Text>{route.params.datetime}</Text>
+          <Text style={{color: 'black'}}>Date & Time</Text>
+          <Text style={{color: 'black'}}>{route.params.datetime}</Text>
         </View>
        
       </View>
       <View style={styles.doctor_biography}>
-        <Text style={{fontSize:18,fontWeight:'bold'}}>Patient Complaint</Text>
-        <Text style={{fontSize:15,fontWeight:'500',marginTop:10}}>
+        <Text style={{fontSize:18,fontWeight:'bold',color: 'black'}}>Patient Complaint</Text>
+        <Text style={{fontSize:15,fontWeight:'500',marginTop:10,color: 'black'}}>
         {route?.params?.complaint} 
         </Text>
       </View>
@@ -242,7 +226,6 @@ const getFileExtention = fileUrl => {
       <TouchableOpacity
             style={styles.appButtonContainer}
               onPress={() => checkPermission()}
-            // onPress={() => navigation.navigate('AppointmentForm')}
             >
             <Text
               style={styles.appButtonText}
