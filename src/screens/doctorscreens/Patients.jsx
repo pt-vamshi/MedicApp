@@ -56,7 +56,7 @@ import {
             .then(querySnapshot => {
               const data = [];
               querySnapshot.forEach(documentSnapshot => {
-                // console.log('user: ', documentSnapshot.data().doctor);
+                //  console.log('user: ', documentSnapshot.data().doctor);
                 // documentSnapshot.data
                 if(documentSnapshot.data().doctor == user?.email){
                   data.push({...documentSnapshot.data(),docid:documentSnapshot.id});
@@ -70,6 +70,7 @@ import {
           Alert.alert(err);
         }
       };
+      console.log(patientdata,"pp")
     const renderData = Item => {
       return (
         <Pressable style={styles.card_container} 
@@ -82,6 +83,8 @@ import {
             gender: Item?.item?.gender,
             doc:Item?.item?.docid,
             status:Item?.item?.appointmentstatus,
+            reports:Item?.item?.reports,
+            fcmtoken:Item?.item?.fcmtoken
           });
         }}>
           <View style={styles.doctor_details}>
@@ -144,7 +147,7 @@ import {
             <Button title='Logout' onPress={() => logout()}/>
             </View>
 
-            <FlatList data={patientdata} renderItem={renderData} />
+            <FlatList data={patientdata} renderItem={renderData} showsVerticalScrollIndicator={false}/>
             
           </View>
         )}
@@ -158,6 +161,8 @@ import {
     },
     doctor_container: {
       margin: 20,
+      // height:'100%',
+      marginBottom:'20%'
     },
     text_header: {
       fontSize: 16,
@@ -165,7 +170,7 @@ import {
       color: 'black',
     },
     card_container: {
-      width: 350,
+      width: "100%",
       height: 130,
       borderWidth: 2,
       marginTop: 15,

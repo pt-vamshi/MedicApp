@@ -133,7 +133,7 @@ const InitialScreen = () => {
     <>
       {loading ? (
         <View style={styles.container}>
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color="#0000ff" style={{marginTop: 300}}/>
         </View>
       ) : (
         <SafeAreaView style={{ flex: 1 }}>

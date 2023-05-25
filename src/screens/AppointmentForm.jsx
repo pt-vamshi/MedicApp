@@ -20,6 +20,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import storage from '@react-native-firebase/storage';
 import DocumentPicker from 'react-native-document-picker';
 import firestore from '@react-native-firebase/firestore';
+import messaging from '@react-native-firebase/messaging';
 const AppointmentForm = ({route,navigation}) => {
   const {user} = useContext(AuthContext);
   const [name, setName] = useState('');
@@ -36,6 +37,34 @@ const AppointmentForm = ({route,navigation}) => {
   const [filedetails, setFileDetails] = useState({});
   const [process, setProcess] = useState('');
   const [isprocess, setIsProcess] = useState(false);
+  const [token,setToken]=useState('')
+
+  useEffect(() => {
+    if (requestUserPermission()) {
+      messaging()
+        .getToken()
+        .then((fcmToken) => {
+          console.log('Patinet FCM Token -> ', fcmToken);
+          setToken(fcmToken)
+          // setdevicetoken(fcmToken);
+        });
+    } else console.log('Not Authorization status:', authStatus);
+
+  }, []);
+
+  const requestUserPermission = async () => {
+    /**
+     * On iOS, messaging permission must be requested by
+     * the current application before messages can be
+     * received or sent
+     */
+    const authStatus = await messaging().requestPermission();
+    // console.log('Authorization status(authStatus):', authStatus);
+    return (
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL
+    );
+  };
 
   const showDatePicker = () => {
     setDatePickerVisibility(true);
@@ -93,13 +122,22 @@ const AppointmentForm = ({route,navigation}) => {
       setIsLoading(true);
 
       // Create Reference
-      // console.log(filePath[0]?.uri,"filepath");
+      //  console.log(filePath[0],"filepath");
       const reference = storage().ref(`/myfiles/${filePath[0].name}`);
 
       // Put File
+
       const task = reference.putFile(
-        filePath[0].fileCopyUri?.replace('file://', ''),
-      );
+        filePath[0].fileCopyUri? filePath[0].fileCopyUri?.replace('file://', ''):filePath[0].uri?.replace('file://', ''),
+      )
+      // if(!task){
+      //   alert('Please chosse Local Documents or Images to upload!');
+      // }
+      // .then((data)=>{
+      //         console.log(data,"data")
+      // }).catch(()=>{
+      //   alert('Please chosse Local Documents or Images to upload!');
+      // });
       // You can do different operation with task
       // task.pause();
       // task.resume();
@@ -120,22 +158,23 @@ const AppointmentForm = ({route,navigation}) => {
         .then(res => {
           setIsProcess(false);
           setDocRes(res);
-          alert('Image uploaded to the bucket!');
+          alert('Image or document  uploaded successfully!');
           setProcess('');
         })
         .catch(err => {
           setIsProcess(false);
           setDocRes({});
-          alert('Something went wrong!');
+          alert('Please choose Local Documents or Images to upload!');
           setProcess('');
         });
       setFileDetails({});
     } catch (error) {
-      console.log('Error->', error);
-      alert(`Error-> ${error}`);
+       console.log('Error->', error);
+      // alert(`Error-> ${error}`);
     }
     setIsLoading(false);
   };
+  // console.log(docres,"docress")
   const onSubmit = () => {
     if(name!=="" && age !=="" && gender !=="" && complaint !=="" && selecteddate!=="" && selectedTime!=="" ){
       setIsLoading(true)
@@ -150,7 +189,8 @@ const AppointmentForm = ({route,navigation}) => {
         datetime:selecteddate+" "+selectedTime,
         reports:docres?.metadata?.name || null,
         appointmentstatus:false,
-        doctor:route?.params.Email
+        doctor:route?.params.Email,
+        fcmtoken:token?token:''
       })
       .then((res) => {
         // console.log(res)
@@ -172,7 +212,7 @@ const AppointmentForm = ({route,navigation}) => {
   const sendMail = async () => {
         try {
           const message = {
-            "to": 'sureshkrish2104@gmail.com',
+            "to": route?.params?.Email,
             "cc": "",
             "data": {
              "doctorName": route?.params?.Name,
@@ -310,6 +350,7 @@ const AppointmentForm = ({route,navigation}) => {
         {/* button  */}
         <TouchableOpacity
           style={styles.appButtonContainer}
+          disabled={isprocess}
           onPress={() => onSubmit()}
           // onPress={() => login(email, password)}
         >

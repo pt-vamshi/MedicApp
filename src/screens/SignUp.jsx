@@ -31,7 +31,7 @@ const SignUp = ({navigation}) => {
 
   return (
     <ScrollView style={{backgroundColor: '#fff'}}>
-      {isloading ? <ActivityIndicator size={'large'} color={'blue'}/>: 
+      {isloading ? <ActivityIndicator size={'large'} color={'blue'} style={{marginTop: 300}}/>: 
       <View
         // behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}>

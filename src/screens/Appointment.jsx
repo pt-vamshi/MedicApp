@@ -77,14 +77,15 @@ const Appointment = ({route, navigation}, props) => {
       <View style={styles.doctor_biography}>
         <Text style={{fontSize:18,fontWeight:'bold'}}>Biography</Text>
         <Text style={{fontSize:15,fontWeight:'500',marginTop:10}}>
-          Dr. {route.params.Name} is a highly accomplished and compassionate medical
+           {route.params.Name} is a highly accomplished and compassionate medical
           professional specializing in {route.params.Speciality}. With extensive
-          experience and a patient-centered approach, Dr. {route.params.Name} is
+          experience and a patient-centered approach, {route.params.Name} is
           known for their exceptional care and dedication to improving lives.
           They actively contribute to medical research and community outreach,
           making a positive impact in healthcare
         </Text>
       </View>
+      <View style={{width:'100%',alignItems:'center'}}>
       <TouchableOpacity
             style={styles.appButtonContainer}
             // onPress={() => doLogin()}
@@ -100,7 +101,8 @@ const Appointment = ({route, navigation}, props) => {
               align="center">
                Book An Appointment
             </Text>
-          </TouchableOpacity>
+      </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -119,11 +121,11 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   card_container: {
-    width: 350,
+    width: "100%",
     height: 130,
     borderWidth: 0,
     marginTop: 15,
-    marginLeft: 15,
+    marginLeft: 5,
     paddingLeft: 10,
     color: '#05375a',
     borderColor: '#f2f2f2',
@@ -135,6 +137,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignContent: 'center',
+    width:'100%'
   },
   doctor_details_Image: {
     flex: 0.4,
@@ -161,7 +164,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   doctor_record: {
-    width: 100,
+    width: "25%",
     height: 50,
     borderWidth: 2,
     marginTop: 15,
@@ -178,19 +181,20 @@ const styles = StyleSheet.create({
     margin:20
   },
   appButtonContainer: {
-    marginTop: 12,
-    marginRight:20,
+    // marginTop: 12,
+    // marginRight:20,
     color: '#05375a',
     borderWidth:1,
-    width:300,
+    width:"90%",
     borderColor: '#f2f2f2',
     height:50,
     elevation: 1,
     backgroundColor: '#354f8c',
     borderRadius:6,
-     paddingVertical: 8,
-    paddingHorizontal: 10,
-    marginLeft:50
+    justifyContent:'center',
+    alignContent:'center',
+    // marginLeft:"5%",
+    // marginRight:"10%"
   },
   appButtonText: {
     fontSize: 20,

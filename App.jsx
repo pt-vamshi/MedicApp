@@ -110,7 +110,7 @@ const App = () => {
      */
     const unsubscribe = messaging().onMessage(
       async (remoteMessage) => {
-        alert('A new FCM message arrived!');
+        // alert('A new FCM message arrived!');
         onDisplayNotification(remoteMessage);
         console.log(
           'A new FCM message arrived!',

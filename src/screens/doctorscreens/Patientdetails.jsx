@@ -1,11 +1,16 @@
-import {View, Text, StyleSheet, Image,TouchableOpacity,ActivityIndicator,Alert} from 'react-native';
+import {View, Text, StyleSheet, Platform,Image,TouchableOpacity,ActivityIndicator,Alert,PermissionsAndroid} from 'react-native';
 import React,{useState,useEffect} from 'react';
 import { AuthContext } from '../AuthProvider';
 import firestore from '@react-native-firebase/firestore';
 import messaging from '@react-native-firebase/messaging';
+import storage from '@react-native-firebase/storage';
+import RNFetchBlob from 'rn-fetch-blob';
+
+
 const Patientdetails = ({route, navigation}, props) => {
   const [isloading, setIsLoading] = useState(false);
   const [token,setToken]=useState('')
+  const [reportfile,setReportFile]=useState('')
     // const {devicetoken,setdevicetoken } = useContext(AuthContext);
     // console.log(devicetoken,"ddd")
 
@@ -33,7 +38,7 @@ const Patientdetails = ({route, navigation}, props) => {
             // setdevicetoken(fcmToken);
           });
       } else console.log('Not Authorization status:', authStatus);
-
+      downloadreport()
     }, []);
 
  const ConfirmAppointment=async ()=>{
@@ -45,14 +50,16 @@ const Patientdetails = ({route, navigation}, props) => {
           .doc(route?.params?.doc)
           .update({
             appointmentstatus: !route?.params?.status,
-          })
-            .then((querySnapshot) => {
+          }).then(querySnapshot => {
               // const data = [];
               // querySnapshot.forEach(documentSnapshot => {
-              //  console.log('user: ', querySnapshot);
-               sendPushNotification()
+              console.log('user: ', querySnapshot);
+               sendPushNotification(route?.params?.status)
                navigation.navigate('Patients');
-              setIsLoading(false);
+               setIsLoading(false);
+            }).catch((err)=>{
+              console.log(err)
+              Alert.alert('Something went wrong!')
             });
         } catch (err) {
           setIsLoading(false);
@@ -60,14 +67,105 @@ const Patientdetails = ({route, navigation}, props) => {
         }
     
  }
- console.log(route?.params?.status)
- const sendPushNotification = async () => {
+ const downloadreport = async () => {
+  if(route?.params?.reports){
+    const url = await storage().ref('myfiles/'+route?.params?.reports).getDownloadURL().then((data)=>{
+      console.log(data)
+      setReportFile(data)
+    }
+    )
+  }
+ 
+ }
+
+ console.log(reportfile,"reportfile")
+ const checkPermission = async () => {
+    
+  // Function to check the platform
+  // If Platform is Android then check for permissions.
+
+  if (Platform.OS === 'ios') {
+    downloadFile();
+  } else {
+    try {
+      const granted = await PermissionsAndroid.request(
+        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        {
+          title: 'Storage Permission Required',
+          message:
+            'Application needs access to your storage to download File',
+        }
+      );
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        // Start downloading
+        downloadFile();
+        console.log('Storage Permission Granted.');
+      } else {
+        // If permission denied then show alert
+        Alert.alert('Error','Storage Permission Not Granted');
+      }
+    } catch (err) {
+      // To handle permission related exception
+      console.log("++++"+err);
+    }
+  }
+};
+
+ const downloadFile = () => {
+   
+  // Get today's date to add the time suffix in filename
+  let date = new Date();
+  // File URL which we want to download
+  let FILE_URL = reportfile;    
+  // Function to get extention of the file url
+  let file_ext = getFileExtention(FILE_URL);
+ 
+  file_ext = '.' + file_ext[0];
+ 
+  // config: To get response by passing the downloading related options
+  // fs: Root directory path to download
+  setIsLoading(true)
+  const { config, fs } = RNFetchBlob;
+  let RootDir = fs.dirs.PictureDir;
+  let options = {
+    fileCache: true,
+    addAndroidDownloads: {
+      path:
+        RootDir+
+        '/file_' + 
+        Math.floor(date.getTime() + date.getSeconds() / 2) +
+        file_ext,
+      description: 'downloading file...',
+      notification: true,
+      // useDownloadManager works with Android only
+      useDownloadManager: true,   
+    },
+  };
+  config(options)
+    .fetch('GET', FILE_URL)
+    .then(res => {
+      // Alert after successful downloading
+      setIsLoading(false)
+      console.log('res -> ', JSON.stringify(res));
+      alert('File Downloaded Successfully.');
+    }).catch((err)=>{
+      setIsLoading(false)
+      console.log('res -> ', JSON.stringify(err));
+      alert('File Downloaded failed.');
+    });
+};
+const getFileExtention = fileUrl => {
+  // To get the file extension
+  return /[.]/.exec(fileUrl) ?
+           /[^.]+$/.exec(fileUrl) : undefined;
+};
+ const sendPushNotification = async (confirm) => {
     try {
       const message = {
-        to:token,
+        to:route?.params?.fcmtoken,
         notification: {
-          title: 'Appointment Confirmed',
-          body: 'Your Appointment on'+route?.params?.datetime+'is confirmed',
+          title: !confirm?'Appointment Confirmed':'Appointment Canceled',
+          body: !confirm?'Your Appointment on '+route?.params?.datetime+' is confirmed':'Your Appointment on'+route?.params?.datetime+'is cancelled',
         },
       };
   
@@ -122,31 +220,41 @@ const Patientdetails = ({route, navigation}, props) => {
           </View>
         </View>
       </View>
-      <View style={{flexDirection: 'row'}}>
-        <View style={styles.doctor_record}>
+      <View style={{flexDirection: 'row',alignItems:'center',justifyContent:'center'}}>
+        {/* <View style={styles.doctor_record}>
           <Text>Patients</Text>
           <Text>2.3k</Text>
-        </View>
+        </View> */}
         <View style={styles.doctor_record}>
-          <Text>Date</Text>
+          <Text>Date & Time</Text>
           <Text>{route.params.datetime}</Text>
         </View>
-        <View style={styles.doctor_record}>
-          <Text>Reviews</Text>
-          <Text>4.00k</Text>
-        </View>
+       
       </View>
       <View style={styles.doctor_biography}>
-        <Text style={{fontSize:18,fontWeight:'bold'}}>Biography</Text>
+        <Text style={{fontSize:18,fontWeight:'bold'}}>Patient Complaint</Text>
         <Text style={{fontSize:15,fontWeight:'500',marginTop:10}}>
-          Dr. {route.params.Name} is a highly accomplished and compassionate medical
-          professional specializing in {route.params.Speciality}. With extensive
-          experience and a patient-centered approach, Dr. {route.params.Name} is
-          known for their exceptional care and dedication to improving lives.
-          They actively contribute to medical research and community outreach,
-          making a positive impact in healthcare
+        {route?.params?.complaint} 
         </Text>
       </View>
+      {route?.params?.reports && 
+      <View style={{width:'100%',alignItems:'center'}}>
+      <TouchableOpacity
+            style={styles.appButtonContainer}
+              onPress={() => checkPermission()}
+            // onPress={() => navigation.navigate('AppointmentForm')}
+            >
+            <Text
+              style={styles.appButtonText}
+              secureTextEntry={true}
+              color="grey"
+              align="center">
+              Download Report
+            </Text>
+          </TouchableOpacity>
+          </View>
+}
+      <View style={{width:'100%',alignItems:'center'}}>
       <TouchableOpacity
             style={styles.appButtonContainer}
               onPress={() => ConfirmAppointment()}
@@ -161,7 +269,9 @@ const Patientdetails = ({route, navigation}, props) => {
                 {route?.params?.status ? 'Cancel Appointment':'Confirm Appointment' }
             </Text>
           </TouchableOpacity>
+          </View>
           </>)}
+
     </View>
   );
 };
@@ -180,7 +290,7 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   card_container: {
-    width: 350,
+    width: "100%",
     height: 130,
     borderWidth: 0,
     marginTop: 15,
@@ -222,12 +332,12 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   doctor_record: {
-    width: 100,
+    width: "60%",
     height: 50,
     borderWidth: 2,
     marginTop: 15,
     marginLeft: 25,
-    paddingLeft: 10,
+    // paddingLeft: 10,
     color: '#05375a',
     borderColor: '#f2f2f2',
     backgroundColor: '#fff',
@@ -240,18 +350,18 @@ const styles = StyleSheet.create({
   },
   appButtonContainer: {
     marginTop: 12,
-    marginRight:20,
+    marginTop: 12,
+    marginRight: 20,
     color: '#05375a',
-    borderWidth:1,
-    width:300,
+    borderWidth: 1,
+    width: 300,
     borderColor: '#f2f2f2',
-    height:50,
+    height: 50,
     elevation: 1,
     backgroundColor: '#354f8c',
-    borderRadius:6,
-     paddingVertical: 8,
+    borderRadius: 6,
+    paddingVertical: 8,
     paddingHorizontal: 10,
-    marginLeft:50
   },
   appButtonText: {
     fontSize: 20,

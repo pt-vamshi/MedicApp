@@ -30,7 +30,7 @@ export default function Routes() {
       return subscriber; // unsubscribe on unmount
     }, []);
     if (loading) {
-      return <ActivityIndicator size={'large'} color={'blue'}/>;
+      return <ActivityIndicator size={'large'} color={'blue'} style={{marginTop: 300}}/>;
     }
     return (
       <NavigationContainer>

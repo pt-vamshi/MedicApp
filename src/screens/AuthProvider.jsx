@@ -1,5 +1,20 @@
 import React, {createContext, useState} from 'react';
 import auth from '@react-native-firebase/auth';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  Platform,
+  StyleSheet,
+  StatusBar,
+  Alert,
+  Image,
+  KeyboardAvoidingView,
+  ScrollView,
+  Button,
+  ActivityIndicator
+} from 'react-native';
 import {ReactNativeFirebase} from '@react-native-firebase/app';
 export const AuthContext = createContext({});
 
@@ -24,6 +39,7 @@ export const AuthProvider = ({children}) => {
           try {
             await auth().signInWithEmailAndPassword(email, password);
           } catch (e) {
+            Alert.alert("user not found!!")
             console.log(e);
           }
         },
