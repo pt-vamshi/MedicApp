@@ -53,13 +53,8 @@ const AppointmentForm = ({route,navigation}) => {
   }, []);
 
   const requestUserPermission = async () => {
-    /**
-     * On iOS, messaging permission must be requested by
-     * the current application before messages can be
-     * received or sent
-     */
+
     const authStatus = await messaging().requestPermission();
-    // console.log('Authorization status(authStatus):', authStatus);
     return (
       authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
       authStatus === messaging.AuthorizationStatus.PROVISIONAL
@@ -93,7 +88,6 @@ const AppointmentForm = ({route,navigation}) => {
     setGender(option);
   };
   const _chooseFile = async () => {
-    // Opening Document Picker to select one file
     try {
       const fileDetails = await DocumentPicker.pick({
         // Provide which type of file you want user to pick
@@ -116,32 +110,15 @@ const AppointmentForm = ({route,navigation}) => {
 
   const _uploadFile = async filePath => {
     try {
-      // Check if file selected
+
       if (Object.keys(filePath).length == 0)
         return alert('Please Select any File');
       setIsLoading(true);
-
-      // Create Reference
-      //  console.log(filePath[0],"filepath");
       const reference = storage().ref(`/myfiles/${filePath[0].name}`);
-
-      // Put File
 
       const task = reference.putFile(
         filePath[0].fileCopyUri? filePath[0].fileCopyUri?.replace('file://', ''):filePath[0].uri?.replace('file://', ''),
       )
-      // if(!task){
-      //   alert('Please chosse Local Documents or Images to upload!');
-      // }
-      // .then((data)=>{
-      //         console.log(data,"data")
-      // }).catch(()=>{
-      //   alert('Please chosse Local Documents or Images to upload!');
-      // });
-      // You can do different operation with task
-      // task.pause();
-      // task.resume();
-      // task.cancel();
 
       task.on('state_changed', taskSnapshot => {
         setIsProcess(true);
@@ -174,7 +151,6 @@ const AppointmentForm = ({route,navigation}) => {
     }
     setIsLoading(false);
   };
-  // console.log(docres,"docress")
   const onSubmit = () => {
     if(name!=="" && age !=="" && gender !=="" && complaint !=="" && selecteddate!=="" && selectedTime!=="" ){
       setIsLoading(true)
@@ -232,8 +208,6 @@ const AppointmentForm = ({route,navigation}) => {
             body: JSON.stringify(message),
           });
       
-          // const responseData = await response.json();
-          // console.log('Email:', response);
         } catch (error) {
           console.error('Error sending notification:', error);
         }
@@ -310,12 +284,12 @@ const AppointmentForm = ({route,navigation}) => {
             </View>
             {selecteddate !== '' && (
               <View style={{flexDirection: 'row', marginTop: 10}}>
-                <Text style={{fontSize: 16}}>
+                <Text style={{fontSize: 16,color:'black'}}>
                   {' '}
                   Selected Date-{selecteddate}
                   {'  '}
                 </Text>
-                <Text style={{fontSize: 16}}>Time-{selectedTime}</Text>
+                <Text style={{fontSize: 16,color:'black'}}>Time-{selectedTime}</Text>
               </View>
             )}
           </View>
