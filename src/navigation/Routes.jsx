@@ -14,7 +14,7 @@ export default function Routes() {
     const [loading, setLoading] = useState(true);
     const [initializing, setInitializing] = useState(true);
     const [isDoctor,setIsDoctor]=useState(false)
-    const doctorEmail=['sureshkrish2104@gmail.com','contact@pearlthoughts.com','parvathi@pearlthoughts.com']
+
   
     // Handle user state changes
     function onAuthStateChanged(user) {

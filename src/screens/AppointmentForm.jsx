@@ -74,7 +74,7 @@ const AppointmentForm = ({route,navigation}) => {
     setSelectedDate(
       selecteddateTime.getDate() +
         '/' +
-        selecteddateTime.getMonth() +
+        parseInt(selecteddateTime.getMonth()+1)+
         '/' +
         selecteddateTime.getFullYear(),
     );
@@ -280,6 +280,7 @@ const AppointmentForm = ({route,navigation}) => {
                 mode="datetime"
                 onConfirm={handleConfirm}
                 onCancel={hideDatePicker}
+                is24Hour 
               />
             </View>
             {selecteddate !== '' && (
@@ -420,6 +421,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
     backgroundColor: '#f9f9fd',
     borderRadius: 5,
+    color:'black'
   },
   buttonStyle: {
     alignItems: 'center',

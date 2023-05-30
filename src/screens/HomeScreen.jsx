@@ -150,7 +150,7 @@ const HomeScreen = ({navigation}) => {
 
   const appointmentData = Item => {
     return (
-      <View style={styles.card_container}>
+      <View style={styles.appointment_card_container}>
         <View style={styles.doctor_details}>
           {/* Image */}
           <View style={styles.doctor_details_Image}>
@@ -166,7 +166,7 @@ const HomeScreen = ({navigation}) => {
 
           <View style={styles.doctor_details_info}>
             <Text style={styles.doctor_name}>
-              doctor-{Item?.item?.doctor?.replace('@gmail.com', '')}
+              doctor-{Item?.item?.doctor}
             </Text>
             <Text style={styles.doctor_speciality}>
               {Item?.item?.complaint}
@@ -266,10 +266,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 5,
     justifyContent: 'center',
+    alignContent:'center',
+    alignItems:'center'
   },
   appointment_card_container: {
-    // width: '100%',
-    height: 130,
+    width: '100%',
+    height: '100%',
     borderWidth: 2,
     marginRight: 5,
     paddingLeft: 10,
@@ -278,6 +280,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 5,
     justifyContent: 'center',
+    alignContent:'center',
+    alignItems:'center'
   },
   doctor_details: {
     flexDirection: 'row',
