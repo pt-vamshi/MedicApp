@@ -1,10 +1,10 @@
 name: Android Publish Play Store (Still in development)
 
-env:
-  # The name of the main module repository
-  main_project_module: android
+# env:
+#   # The name of the main module repository
+#   main_project_module: android
 
-  # The name of the Play Store
+#   # The name of the Play Store
 
 on:
   push:
